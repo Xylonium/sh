@@ -1,5 +1,5 @@
 #!/bin/bash
-sh_v="4.0.1"
+sh_v="4.0.2"
 
 
 gl_hui='\e[37m'
@@ -122,11 +122,11 @@ UserLicenseAgreement() {
 
 
 	if [ "$user_input" = "y" ] || [ "$user_input" = "Y" ]; then
-		send_stats "许可同意"
+		send_stats "라이센스 동의"
 		sed -i 's/^permission_granted="false"/permission_granted="true"/' ~/kejilion.sh
 		sed -i 's/^permission_granted="false"/permission_granted="true"/' /usr/local/bin/k
 	else
-		send_stats "许可拒绝"
+		send_stats "허가 거부"
 		clear
 		exit
 	fi
@@ -155,7 +155,7 @@ install() {
 
 	for package in "$@"; do
 		if ! command -v "$package" &>/dev/null; then
-			echo -e "${gl_huang}正在安装 $package...${gl_bai}"
+			echo -e "${gl_huang}설치$package...${gl_bai}"
 			if command -v dnf &>/dev/null; then
 				dnf -y update
 				dnf install -y epel-release
@@ -487,20 +487,20 @@ while true; do
 	echo "------------------------"
 	echo "1. 새 컨테이너를 만듭니다"
 	echo "------------------------"
-	echo "2. 启动指定容器             6. 启动所有容器"
-	echo "3. 停止指定容器             7. 停止所有容器"
+	echo "2. 지정된 컨테이너를 시작하십시오. 6. 모든 컨테이너를 시작하십시오"
+	echo "3. 지정된 컨테이너를 중지하십시오. 7. 모든 컨테이너를 중지하십시오"
 	echo "4. 지정된 컨테이너를 삭제합니다. 8. 모든 컨테이너를 삭제하십시오"
 	echo "5. 지정된 컨테이너를 다시 시작하십시오. 9. 모든 컨테이너를 다시 시작하십시오"
 	echo "------------------------"
-	echo "11. 进入指定容器           12. 查看容器日志"
-	echo "13. 查看容器网络           14. 查看容器占用"
+	echo "11. 지정된 컨테이너를 입력하십시오. 12. 컨테이너 로그보기"
+	echo "13. 컨테이너 네트워크보기 14. 컨테이너 점유보기"
 	echo "------------------------"
 	echo "0. 이전 메뉴로 돌아갑니다"
 	echo "------------------------"
 	read -e -p "선택을 입력하십시오 :" sub_choice
 	case $sub_choice in
 		1)
-			send_stats "新建容器"
+			send_stats "새 컨테이너를 만듭니다"
 			read -e -p "창조 명령을 입력하십시오 :" dockername
 			$dockername
 			;;
@@ -1649,12 +1649,7 @@ cf_purge_cache() {
 web_cache() {
   send_stats "사이트 캐시를 정리하십시오"
   cf_purge_cache
-  docker exec php php -r 'opcache_reset();'
-  docker exec php74 php -r 'opcache_reset();'
-  docker exec nginx nginx -s stop
-  docker exec nginx rm -rf /var/cache/nginx/*
-  docker exec nginx nginx
-  docker restart redis
+  cd /home/web && docker compose restart
   restart_redis
 }
 
@@ -3453,7 +3448,7 @@ ldnmp_web_status() {
 
 
 check_panel_app() {
-if $lujing ; then
+if $lujing > /dev/null 2>&1; then
 	check_panel="${gl_lv}已安装${gl_bai}"
 else
 	check_panel=""
@@ -4010,10 +4005,10 @@ yt_menu_pro() {
 				send_stats "yt-dlp 제거 ..."
 				echo "yt-dlp 제거 ..."
 				sudo rm -f /usr/local/bin/yt-dlp
-				echo "Uninstall is complete. 계속하려면 키를 누르십시오 ..."
+				echo "제거가 완료되었습니다. 계속하려면 키를 누르십시오 ..."
 				read ;;
 			5)
-				send_stats "单个视频下载"
+				send_stats "단일 비디오 다운로드"
 				read -e -p "비디오 링크를 입력하십시오 :" url
 				yt-dlp -P "$VIDEO_DIR" -f "bv*+ba/b" --merge-output-format mp4 \
 					--write-subs --sub-langs all \
@@ -8399,6 +8394,7 @@ linux_panel() {
 	  echo -e "${gl_kjlan}73.  ${gl_bai}Libretv 개인 영화 및 텔레비전${gl_kjlan}74.  ${gl_bai}Moontv 개인 영화"
 	  echo -e "${gl_kjlan}75.  ${gl_bai}멜로디 음악 엘프${gl_kjlan}76.  ${gl_bai}온라인 dos 오래된 게임"
 	  echo -e "${gl_kjlan}77.  ${gl_bai}천둥 오프라인 다운로드 도구${gl_kjlan}78.  ${gl_bai}Pandawiki 지능형 문서 관리 시스템"
+	  echo -e "${gl_kjlan}79.  ${gl_bai}Beszel 서버 모니터링"
 	  echo -e "${gl_kjlan}------------------------"
 	  echo -e "${gl_kjlan}0.   ${gl_bai}메인 메뉴로 돌아갑니다"
 	  echo -e "${gl_kjlan}------------------------${gl_bai}"
@@ -8455,13 +8451,13 @@ linux_panel() {
 			  ;;
 		  3)
 
-			local lujing="command -v 1pctl > /dev/null 2>&1"
+			local lujing="command -v 1pctl"
 			local panelname="1Panel"
 			local panelurl="https://1panel.cn/"
 
 			panel_app_install() {
 				install bash
-				curl -sSL https://resource.fit2cloud.com/1panel/package/quick_start.sh -o quick_start.sh && bash quick_start.sh
+				bash -c "$(curl -sSL https://resource.fit2cloud.com/1panel/package/v2/quick_start.sh)"
 			}
 
 			panel_app_manage() {
@@ -10531,6 +10527,33 @@ linux_panel() {
 
 
 
+		  79)
+
+			local docker_name="beszel"
+			local docker_img="henrygd/beszel"
+			local docker_port=8079
+
+			docker_rum() {
+
+				mkdir -p /home/docker/beszel && \
+				docker run -d \
+				  --name beszel \
+				  --restart=unless-stopped \
+				  -v /home/docker/beszel:/beszel_data \
+				  -p ${docker_port}:8090 \
+				  henrygd/beszel
+
+			}
+
+			local docker_describe="Beszel轻量易用的服务器监控"
+			local docker_url="官网介绍: https://beszel.dev/zh/"
+			local docker_use=""
+			local docker_passwd=""
+			local app_size="1"
+			docker_app
+
+			  ;;
+
 
 		  0)
 			  kejilion
@@ -11214,7 +11237,7 @@ EOF
 				echo "현재 시스템 시간 :$current_time"
 
 				echo ""
-				echo "시간대 전환"
+				echo "시간대 스위칭"
 				echo "------------------------"
 				echo "아시아"
 				echo "1. 중국의 상하이 시간 2. 중국의 홍콩 시간"
