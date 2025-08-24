@@ -1,5 +1,5 @@
 #!/bin/bash
-sh_v="4.0.8"
+sh_v="4.0.9"
 
 
 gl_hui='\e[37m'
@@ -5959,7 +5959,7 @@ ssh_manager() {
 	while true; do
 		clear
 		echo "SSH Remote Connection Tool"
-		echo "Can be connected to other Linux systems via SSH"
+		echo "Can connect to other Linux systems via SSH"
 		echo "------------------------"
 		list_connections
 		echo "1. Create a new connection 2. Use a connection 3. Delete a connection"
@@ -8497,7 +8497,7 @@ while true; do
 	  echo -e "${gl_kjlan}21.  ${color21}VScode web version${gl_kjlan}22.  ${color22}UptimeKuma monitoring tool"
 	  echo -e "${gl_kjlan}23.  ${color23}Memos web page memo${gl_kjlan}24.  ${color24}Webtop Remote Desktop Web Edition${gl_huang}★${gl_bai}"
 	  echo -e "${gl_kjlan}25.  ${color25}Nextcloud network disk${gl_kjlan}26.  ${color26}QD-Today timing task management framework"
-	  echo -e "${gl_kjlan}27.  ${color27}Dockge Container Stack Management Panel${gl_kjlan}28.  ${color28}LibreSpeed Speed Test Tool"
+	  echo -e "${gl_kjlan}27.  ${color27}Dockge Container Stack Management Panel${gl_kjlan}28.  ${color28}LibreSpeed ​​Speed ​​Test Tool"
 	  echo -e "${gl_kjlan}29.  ${color29}searxng aggregation search site${gl_huang}★${gl_bai}                 ${gl_kjlan}30.  ${color30}PhotoPrism Private Album System"
 	  echo -e "${gl_kjlan}------------------------"
 	  echo -e "${gl_kjlan}31.  ${color31}StirlingPDF tool collection${gl_kjlan}32.  ${color32}drawio free online charting software${gl_huang}★${gl_bai}"
@@ -8534,6 +8534,9 @@ while true; do
 	  echo -e "${gl_kjlan}83.  ${color83}komari server monitoring tool${gl_kjlan}84.  ${color84}Wallos personal financial management tools"
 	  echo -e "${gl_kjlan}85.  ${color85}immich picture video manager${gl_kjlan}86.  ${color86}jellyfin media management system"
 	  echo -e "${gl_kjlan}87.  ${color87}SyncTV movie watching artifact${gl_kjlan}88.  ${color88}Owncast self-hosted live broadcast platform"
+	  echo -e "${gl_kjlan}89.  ${color89}FileCodeBox file express${gl_kjlan}90.  ${color90}matrix decentralized chat protocol"
+	  echo -e "${gl_kjlan}------------------------"
+	  echo -e "${gl_kjlan}b.   ${gl_bai}Back up all application data${gl_kjlan}r.   ${color88}Restore all application data"
 	  echo -e "${gl_kjlan}------------------------"
 	  echo -e "${gl_kjlan}0.   ${gl_bai}Return to main menu"
 	  echo -e "${gl_kjlan}------------------------${gl_bai}"
@@ -10918,10 +10921,12 @@ while true; do
 
 		docker_rum() {
 
+			read -e -p "set up${docker_name}The login key (sk-staring letters and numbers combinations) such as: sk-159kejilionyyds163:" app_passwd
+
 			mkdir -p /home/docker/gpt-load && \
 			docker run -d --name gpt-load \
 				-p ${docker_port}:3001 \
-				-e AUTH_KEY=sk-123456 \
+				-e AUTH_KEY=${app_passwd} \
 				-v "/home/docker/gpt-load/data":/app/data \
 				tbphp/gpt-load:latest
 
@@ -10929,7 +10934,7 @@ while true; do
 
 		local docker_describe="高性能AI接口透明代理服务"
 		local docker_url="官网介绍: https://www.gpt-load.com/"
-		local docker_use="echo \"默认管理密钥: sk-123456\""
+		local docker_use=""
 		local docker_passwd=""
 		local app_size="1"
 		docker_app
@@ -11135,6 +11140,161 @@ while true; do
 
 		  ;;
 
+
+
+	  89|file-code-box)
+
+		local app_id="89"
+		local docker_name="file-code-box"
+		local docker_img="lanol/filecodebox:latest"
+		local docker_port=8089
+
+		docker_rum() {
+
+			docker run -d \
+			  --name file-code-box \
+			  -p ${docker_port}:12345 \
+			  -v /home/docker/file-code-box/data:/app/data \
+			  --restart unless-stopped \
+			  lanol/filecodebox:latest
+
+		}
+
+		local docker_describe="匿名口令分享文本和文件，像拿快递一样取文件"
+		local docker_url="官网介绍: https://github.com/vastsa/FileCodeBox"
+		local docker_use=""
+		local docker_passwd=""
+		local app_size="1"
+		docker_app
+
+		  ;;
+
+
+
+
+	  90|matrix)
+
+		local app_id="90"
+		local docker_name="matrix"
+		local docker_img="matrixdotorg/synapse:latest"
+		local docker_port=8090
+
+		docker_rum() {
+
+			add_yuming
+
+			if [ ! -d /home/docker/matrix/data ]; then
+				docker run -it --rm \
+				  -v /home/docker/matrix/data:/data \
+				  -e SYNAPSE_SERVER_NAME=${yuming} \
+				  -e SYNAPSE_REPORT_STATS=yes \
+				  --name matrix \
+				  matrixdotorg/synapse:latest generate
+			fi
+
+			docker run -d \
+			  --name matrix \
+			  -v /home/docker/matrix/data:/data \
+			  -p ${docker_port}:8008 \
+			  --restart unless-stopped \
+			  matrixdotorg/synapse:latest
+
+			echo "Create an initial user or administrator. Please set the following username and password and whether you are an administrator."
+			docker exec -it matrix register_new_matrix_user \
+			  http://localhost:8008 \
+			  -c /data/homeserver.yaml
+
+			sed -i '/^enable_registration:/d' /home/docker/matrix/data/homeserver.yaml
+			sed -i '/^# vim:ft=yaml/i enable_registration: true' /home/docker/matrix/data/homeserver.yaml
+			sed -i '/^enable_registration_without_verification:/d' /home/docker/matrix/data/homeserver.yaml
+			sed -i '/^# vim:ft=yaml/i enable_registration_without_verification: true' /home/docker/matrix/data/homeserver.yaml
+
+			docker restart matrix
+
+			ldnmp_Proxy ${yuming} 127.0.0.1 ${docker_port}
+			block_container_port "$docker_name" "$ipv4_address"
+
+		}
+
+		local docker_describe="Matrix是一个去中心化的聊天协议"
+		local docker_url="官网介绍: https://matrix.org/"
+		local docker_use=""
+		local docker_passwd=""
+		local app_size="1"
+		docker_app
+
+		  ;;
+
+
+
+
+	  b)
+	  	clear
+	  	send_stats "All applications backup"
+
+	  	local backup_filename="app_$(date +"%Y%m%d%H%M%S").tar.gz"
+	  	echo -e "${gl_huang}Backing up$backup_filename ...${gl_bai}"
+	  	cd / && tar czvf "$backup_filename" home
+
+	  	while true; do
+			clear
+			echo "The backup file has been created: /$backup_filename"
+			read -e -p "Do you want to transfer backup data to a remote server? (Y/N):" choice
+			case "$choice" in
+			  [Yy])
+				read -e -p "Please enter the remote server IP:" remote_ip
+				if [ -z "$remote_ip" ]; then
+				  echo "Error: Please enter the remote server IP."
+				  continue
+				fi
+				local latest_tar=$(ls -t /app*.tar.gz | head -1)
+				if [ -n "$latest_tar" ]; then
+				  ssh-keygen -f "/root/.ssh/known_hosts" -R "$remote_ip"
+				  sleep 2  # 添加等待时间
+				  scp -o StrictHostKeyChecking=no "$latest_tar" "root@$remote_ip:/"
+				  echo "The file has been transferred to the remote server/root directory."
+				else
+				  echo "The file to be transferred was not found."
+				fi
+				break
+				;;
+			  *)
+				echo "Note: Currently, the backup only includes docker projects, and does not include data backup of website building panels such as Pagoda and 1panel."
+				break
+				;;
+			esac
+	  	done
+
+		  ;;
+
+	  r)
+	  	root_use
+	  	send_stats "All applications restore"
+	  	echo "Available app backups"
+	  	echo "-------------------------"
+	  	ls -lt /app*.gz | awk '{print $NF}'
+	  	echo ""
+	  	read -e -p  "Enter to restore the latest backup, enter the backup file name to restore the specified backup, enter 0 to exit:" filename
+
+	  	if [ "$filename" == "0" ]; then
+			  break_end
+			  linux_panel
+	  	fi
+
+	  	# If the user does not enter the file name, use the latest compressed package
+	  	if [ -z "$filename" ]; then
+			  local filename=$(ls -t /app*.tar.gz | head -1)
+	  	fi
+
+	  	if [ -n "$filename" ]; then
+		  	  echo -e "${gl_huang}Decompression is being done$filename ...${gl_bai}"
+		  	  cd / && tar -xzf "$filename"
+			  echo "The application data has been restored. Please manually enter the specified application menu and update the application to restore the application."
+	  	else
+			  echo "No compression package was found."
+	  	fi
+
+		  ;;
 
 	  0)
 		  kejilion
