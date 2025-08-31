@@ -793,7 +793,7 @@ docker_ipv6_on() {
 			UPDATED_CONFIG=$(echo "$ORIGINAL_CONFIG" | jq '. + {"fixed-cidr-v6": "2001:db8:1::/64"}')
 		fi
 
-		# 元の構成を新しい構成と比較します
+		# 元の構成と新しい構成を比較します
 		if [[ "$ORIGINAL_CONFIG" == "$UPDATED_CONFIG" ]]; then
 			echo -e "${gl_huang}現在、IPv6アクセスが有効になっています${gl_bai}"
 		else
@@ -825,7 +825,7 @@ docker_ipv6_off() {
 	# 現在のIPv6ステータスを確認してください
 	local CURRENT_IPV6=$(echo "$ORIGINAL_CONFIG" | jq -r '.ipv6 // false')
 
-	# 元の構成を新しい構成と比較します
+	# 元の構成と新しい構成を比較します
 	if [[ "$CURRENT_IPV6" == "false" ]]; then
 		echo -e "${gl_huang}IPv6アクセスは現在閉じられています${gl_bai}"
 	else
@@ -1558,7 +1558,7 @@ fi
 
 add_yuming() {
 	  ip_address
-	  echo -e "最初にドメイン名をネイティブIPに解決します。${gl_huang}$ipv4_address  $ipv6_address${gl_bai}"
+	  echo -e "最初にドメイン名をローカルIPに解決します。${gl_huang}$ipv4_address  $ipv6_address${gl_bai}"
 	  read -e -p "IPまたは解決されたドメイン名を入力してください：" yuming
 }
 
@@ -3892,7 +3892,7 @@ frps_panel() {
 		echo "------------------------"
 		echo "7. IP+ポートアクセスを許可8。BlockIP+ポートアクセス"
 		echo "------------------------"
-		echo "00。サービスのステータスを更新します。前のメニューに戻ります"
+		echo "00。サービスのステータスを更新します0。前のメニューに戻ります"
 		echo "------------------------"
 		read -e -p "あなたの選択を入力してください：" choice
 		case $choice in
@@ -4147,7 +4147,7 @@ yt_menu_pro() {
 					--no-overwrites --no-post-overwrites
 				read -e -p "実行が完了したら、キーを押して続行します..." ;;
 			8)
-				send_stats "mp3ダウンロード"
+				send_stats "MP3ダウンロード"
 				read -e -p "ビデオリンクを入力してください：" url
 				yt-dlp -P "$VIDEO_DIR" -x --audio-format mp3 \
 					--write-subs --sub-langs all \
@@ -4521,7 +4521,7 @@ echo -e "${gl_lv}ルートログインがセットアップされます！${gl_b
 
 root_use() {
 clear
-[ "$EUID" -ne 0 ] && echo -e "${gl_huang}ヒント：${gl_bai}この機能では、ルートユーザーを実行する必要があります！" && break_end && kejilion
+[ "$EUID" -ne 0 ] && echo -e "${gl_huang}ヒント：${gl_bai}この機能には、ルートユーザーを実行する必要があります！" && break_end && kejilion
 }
 
 
@@ -5278,7 +5278,7 @@ optimize_balanced() {
 
 # デフォルト設定関数を復元します
 restore_defaults() {
-	echo -e "${gl_lv}デフォルト設定に復元...${gl_bai}"
+	echo -e "${gl_lv}デフォルト設定に復元します...${gl_bai}"
 
 	echo -e "${gl_lv}ファイル記述子を復元します...${gl_bai}"
 	ulimit -n 1024
@@ -5818,7 +5818,7 @@ list_connections() {
 # 新しい接続を追加します
 add_connection() {
 	send_stats "新しい接続を追加します"
-	echo "新しい接続を作成する例："
+	echo "新しい接続例を作成します："
 	echo "- 接続名：my_server"
 	echo "-  IPアドレス：192.168.1.100"
 	echo "- ユーザー名：root"
@@ -6418,7 +6418,7 @@ rsync_manager() {
 		echo
 		echo "1.新しいタスクを作成します2。タスクを削除します"
 		echo "3.リモートエンドにローカル同期を実行する4。ローカルエンドにリモート同期を実行する"
-		echo "5.タイミングタスクを作成6.タイミングタスクを削除します"
+		echo "5.タイミングタスクを作成6。タイミングタスクを削除します"
 		echo "---------------------------------"
 		echo "0。前のメニューに戻ります"
 		echo "---------------------------------"
@@ -7904,7 +7904,7 @@ linux_ldnmp() {
 
 
 	  ldnmp_web_on
-	  echo "データベースアドレス：MySQL"
+	  echo "データベースアドレス：mysql"
 	  echo "データベース名：$dbname"
 	  echo "ユーザー名：$dbuse"
 	  echo "パスワード：$dbusepasswd"
@@ -7940,7 +7940,7 @@ linux_ldnmp() {
 	  restart_ldnmp
 
 	  ldnmp_web_on
-	  echo "データベースアドレス：MySQL"
+	  echo "データベースアドレス：mysql"
 	  echo "ユーザー名：$dbuse"
 	  echo "パスワード：$dbusepasswd"
 	  echo "データベース名：$dbname"
@@ -7979,7 +7979,7 @@ linux_ldnmp() {
 
 
 	  ldnmp_web_on
-	  echo "データベースアドレス：MySQL"
+	  echo "データベースアドレス：mysql"
 	  echo "データベースポート：3306"
 	  echo "データベース名：$dbname"
 	  echo "ユーザー名：$dbuse"
@@ -8017,7 +8017,7 @@ linux_ldnmp() {
 
 
 	  ldnmp_web_on
-	  echo "データベースアドレス：MySQL"
+	  echo "データベースアドレス：mysql"
 	  echo "データベースポート：3306"
 	  echo "データベース名：$dbname"
 	  echo "ユーザー名：$dbuse"
@@ -8081,7 +8081,7 @@ linux_ldnmp() {
 
 
 	  ldnmp_web_on
-	  echo "データベースアドレス：MySQL"
+	  echo "データベースアドレス：mysql"
 	  echo "データベース名：$dbname"
 	  echo "ユーザー名：$dbuse"
 	  echo "パスワード：$dbusepasswd"
@@ -8120,7 +8120,7 @@ linux_ldnmp() {
 	  clear
 	  ldnmp_web_on
 	  echo "データベースプレフィックス：typecho_"
-	  echo "データベースアドレス：MySQL"
+	  echo "データベースアドレス：mysql"
 	  echo "ユーザー名：$dbuse"
 	  echo "パスワード：$dbusepasswd"
 	  echo "データベース名：$dbname"
@@ -8158,7 +8158,7 @@ linux_ldnmp() {
 
 	  clear
 	  ldnmp_web_on
-	  echo "データベースアドレス：MySQL"
+	  echo "データベースアドレス：mysql"
 	  echo "データベースポート：3306"
 	  echo "データベース名：$dbname"
 	  echo "ユーザー名：$dbuse"
@@ -8284,7 +8284,7 @@ linux_ldnmp() {
 	  restart_ldnmp
 	  ldnmp_web_on
 	  prefix="web$(shuf -i 10-99 -n 1)_"
-	  echo "データベースアドレス：MySQL"
+	  echo "データベースアドレス：mysql"
 	  echo "データベース名：$dbname"
 	  echo "ユーザー名：$dbuse"
 	  echo "パスワード：$dbusepasswd"
@@ -11868,7 +11868,7 @@ while true; do
 		echo -e "${gl_huang}すべてのクライアント構成コード：${gl_bai}"
 		docker exec wireguard sh -c 'for d in /config/peer_*; do echo "# $(basename $d) "; cat $d/*.conf; echo; done'
 		sleep 2
-		echo -e "${gl_lv}${COUNT}すべての出力は各クライアントによって提供されます。使用方法は次のとおりです。${gl_bai}"
+		echo -e "${gl_lv}${COUNT}すべての出力はすべて各クライアントによって構成されており、使用方法は次のとおりです。${gl_bai}"
 		echo -e "${gl_lv}1.携帯電話にWGのアプリをダウンロードして、上のQRコードをスキャンしてネットワークにすばやく接続します${gl_bai}"
 		echo -e "${gl_lv}2。Windowsクライアントをダウンロードし、構成コードをコピーしてネットワークに接続します。${gl_bai}"
 		echo -e "${gl_lv}3。Linuxはスクリプトを使用してWGクライアントを展開し、構成コードをコピーしてネットワークに接続します。${gl_bai}"
@@ -11926,6 +11926,8 @@ while true; do
 			echo "$input" > "$CONFIG_FILE"
 
 			echo "クライアントの構成が保存されています$CONFIG_FILE"
+
+			ip link delete wg0 &>/dev/null
 
 			docker run -d \
 			  --name wireguardc \
@@ -12903,7 +12905,7 @@ EOF
 								  break  # 跳出
 								  ;;
 						  esac
-						  send_stats "タイムされたタスクを追加します"
+						  send_stats "時限タスクを追加します"
 						  ;;
 					  2)
 						  read -e -p "削除する必要があるキーワードを入力してください。" kquest
@@ -13148,7 +13150,7 @@ EOF
 			  echo "TG-BOTモニタリングと早期警告機能"
 			  echo "ビデオの紹介：https：//youtu.be/vll-eb3z_ty"
 			  echo "------------------------------------------------"
-			  echo "ネイティブCPU、メモリ、ハードディスク、トラフィック、SSHログインのリアルタイム監視と早期警告を実現するために、TG Robot APIとユーザーIDを構成する必要があります。"
+			  echo "ネイティブCPU、メモリ、ハードディスク、トラフィック、およびSSHログインのリアルタイム監視と早期警告を実現するために、TG Robot APIとユーザーIDを構成する必要があります。"
 			  echo "しきい値に達した後、ユーザーはユーザーに送信されます"
 			  echo -e "${gl_hui}- トラフィックに関しては、サーバーの再起動が再計算されます -${gl_bai}"
 			  read -e -p "必ず続行しますか？ （y/n）：" choice
@@ -13508,7 +13510,7 @@ linux_file() {
 				;;
 			3)  # 修改目录权限
 				read -e -p "ディレクトリ名を入力してください：" dirname
-				read -e -p "許可（755など）を入力してください。" perm
+				read -e -p "許可を入力してください（755など）：" perm
 				chmod "$perm" "$dirname" && echo "許可が変更されました" || echo "変更に失敗しました"
 				send_stats "ディレクトリ権限を変更します"
 				;;
@@ -13540,7 +13542,7 @@ linux_file() {
 				;;
 			13) # 修改文件权限
 				read -e -p "ファイル名を入力してください：" filename
-				read -e -p "許可（755など）を入力してください。" perm
+				read -e -p "許可を入力してください（755など）：" perm
 				chmod "$perm" "$filename" && echo "許可が変更されました" || echo "変更に失敗しました"
 				send_stats "ファイル権限を変更します"
 				;;

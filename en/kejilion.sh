@@ -1558,7 +1558,7 @@ fi
 
 add_yuming() {
 	  ip_address
-	  echo -e "First resolve the domain name to the native IP:${gl_huang}$ipv4_address  $ipv6_address${gl_bai}"
+	  echo -e "First resolve the domain name to the local IP:${gl_huang}$ipv4_address  $ipv6_address${gl_bai}"
 	  read -e -p "Please enter your IP or the resolved domain name:" yuming
 }
 
@@ -5818,7 +5818,7 @@ list_connections() {
 # Add a new connection
 add_connection() {
 	send_stats "Add a new connection"
-	echo "Example to create a new connection:"
+	echo "Create a new connection example:"
 	echo "- Connection name: my_server"
 	echo "- IP address: 192.168.1.100"
 	echo "- Username: root"
@@ -11868,7 +11868,7 @@ while true; do
 		echo -e "${gl_huang}All client configuration codes:${gl_bai}"
 		docker exec wireguard sh -c 'for d in /config/peer_*; do echo "# $(basename $d) "; cat $d/*.conf; echo; done'
 		sleep 2
-		echo -e "${gl_lv}${COUNT}All outputs are provided by each client. The usage method is as follows:${gl_bai}"
+		echo -e "${gl_lv}${COUNT}All outputs are all configured by each client, and the usage method is as follows:${gl_bai}"
 		echo -e "${gl_lv}1. Download wg's APP on your mobile phone, scan the QR code above to quickly connect to the network${gl_bai}"
 		echo -e "${gl_lv}2. Download the Windows client and copy the configuration code to connect to the network.${gl_bai}"
 		echo -e "${gl_lv}3. Linux uses scripts to deploy WG clients and copy configuration code to connect to the network.${gl_bai}"
@@ -11926,6 +11926,8 @@ while true; do
 			echo "$input" > "$CONFIG_FILE"
 
 			echo "Client configuration has been saved to$CONFIG_FILE"
+
+			ip link delete wg0 &>/dev/null
 
 			docker run -d \
 			  --name wireguardc \
@@ -12892,7 +12894,7 @@ EOF
 								  (crontab -l ; echo "0 0 * * $weekday $newquest") | crontab - > /dev/null 2>&1
 								  ;;
 							  3)
-								  read -e -p "Choose what time to perform tasks every day? (Hours, 0-23):" hour
+								  read -e -p "Choose when to perform tasks every day? (Hours, 0-23):" hour
 								  (crontab -l ; echo "0 $hour * * * $newquest") | crontab - > /dev/null 2>&1
 								  ;;
 							  4)
