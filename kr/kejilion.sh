@@ -1558,7 +1558,7 @@ fi
 
 add_yuming() {
 	  ip_address
-	  echo -e "먼저 도메인 이름을 로컬 IP로 해결합니다.${gl_huang}$ipv4_address  $ipv6_address${gl_bai}"
+	  echo -e "먼저 도메인 이름을 기본 IP로 해결합니다.${gl_huang}$ipv4_address  $ipv6_address${gl_bai}"
 	  read -e -p "IP 또는 해결 된 도메인 이름을 입력하십시오." yuming
 }
 
@@ -5818,7 +5818,7 @@ list_connections() {
 # 새 연결을 추가하십시오
 add_connection() {
 	send_stats "새 연결을 추가하십시오"
-	echo "새 연결 예제 :"
+	echo "새 연결을 만드는 예 :"
 	echo "- 연결 이름 : my_server"
 	echo "-IP 주소 : 192.168.1.100"
 	echo "- 사용자 이름 : 루트"
@@ -11868,7 +11868,7 @@ while true; do
 		echo -e "${gl_huang}모든 클라이언트 구성 코드 :${gl_bai}"
 		docker exec wireguard sh -c 'for d in /config/peer_*; do echo "# $(basename $d) "; cat $d/*.conf; echo; done'
 		sleep 2
-		echo -e "${gl_lv}${COUNT}모든 출력은 모두 각 클라이언트에 의해 구성되며 사용 방법은 다음과 같습니다.${gl_bai}"
+		echo -e "${gl_lv}${COUNT}모든 출력은 각 클라이언트가 제공합니다. 사용법은 다음과 같습니다.${gl_bai}"
 		echo -e "${gl_lv}1. 휴대 전화에서 WG의 앱을 다운로드하고 위의 QR 코드를 스캔하여 네트워크에 빠르게 연결하십시오.${gl_bai}"
 		echo -e "${gl_lv}2. Windows 클라이언트를 다운로드하고 구성 코드를 복사하여 네트워크에 연결하십시오.${gl_bai}"
 		echo -e "${gl_lv}3. Linux는 스크립트를 사용하여 WG 클라이언트를 배포하고 구성 코드를 복사하여 네트워크에 연결합니다.${gl_bai}"
@@ -12894,7 +12894,7 @@ EOF
 								  (crontab -l ; echo "0 0 * * $weekday $newquest") | crontab - > /dev/null 2>&1
 								  ;;
 							  3)
-								  read -e -p "매일 작업을 수행 할 시간을 선택하십시오. (시간, 0-23) :" hour
+								  read -e -p "매일 작업을 수행 할시기를 선택 하시겠습니까? (시간, 0-23) :" hour
 								  (crontab -l ; echo "0 $hour * * * $newquest") | crontab - > /dev/null 2>&1
 								  ;;
 							  4)
@@ -13402,7 +13402,7 @@ EOF
 					  sed -i 's/^ENABLE_STATS="false"/ENABLE_STATS="true"/' /usr/local/bin/k
 					  sed -i 's/^ENABLE_STATS="false"/ENABLE_STATS="true"/' ~/kejilion.sh
 					  echo "수집이 활성화되었습니다"
-					  send_stats "개인 정보 보호 및 보안 컬렉션이 활성화되었습니다"
+					  send_stats "수집을 위해 개인 정보 및 보안이 가능했습니다"
 					  ;;
 				  2)
 					  cd ~
